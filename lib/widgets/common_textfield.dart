@@ -42,6 +42,7 @@ class _CommonTextFormFieldState extends State<CommonTextFormField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       controller: widget.controller,
       obscureText: _obscureText,
       keyboardType: widget.keyboardType,

@@ -6,6 +6,7 @@ import 'package:machine_test_quadleo/bloc/login/login_state.dart';
 import 'package:machine_test_quadleo/core/app_theme/app_textstyles.dart';
 import 'package:machine_test_quadleo/core/utils/app_size.dart';
 import 'package:machine_test_quadleo/core/utils/app_snackbar.dart';
+import 'package:machine_test_quadleo/core/utils/form_validator.dart';
 import 'package:machine_test_quadleo/core/utils/internet_chacker.dart';
 import 'package:machine_test_quadleo/core/utils/routes.dart';
 import 'package:machine_test_quadleo/widgets/common_button.dart';
@@ -17,6 +18,7 @@ class LoginScreen extends StatelessWidget {
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final forKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -38,53 +40,61 @@ class LoginScreen extends StatelessWidget {
             },
             child: BlocBuilder<LoginBloc, LoginState>(
               builder: (context, state) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("Welcome back!", style: AppTextstyles.primaryText),
-                    AppSize.sizedBox(size: 25, isHeight: true),
-                    CommonTextFormField(
-                      prefixIcon: "assets/images/email_icon.png",
-                      controller: emailController,
-                      labelText: "Email",
-                    ),
-                    AppSize.sizedBox(size: 15, isHeight: true),
-                    CommonTextFormField(
-                      controller: passwordController,
-                      labelText: "Password",
-                      isObscure: true,
-                      prefixIcon:"assets/images/password_icon.png",
-                    ),
-                    AppSize.sizedBox(size: 32, isHeight: true),
-                    state is LoginLoading
-                        ? CircularProgressIndicator()
-                        : CommonButton(
-                            onTap: () async {
-                              context.read<LoginBloc>().add(
-                                LoginPressed(
-                                  email: emailController.text,
-                                  password: passwordController.text,
-                                ),
-                              );
-                            },
-                            buttonText: "Sign in",
-                          ),
-                    AppSize.sizedBox(size: 15, isHeight: true),
-                    CommonButton(
-                      onTap: () {},
-                      buttonText: "Forgot password?",
-                      isWhite: true,
-                    ),
-                    AppSize.sizedBox(size: 15, isHeight: true),
-                    CommonButton(
-                      onTap: () {
-                        Navigator.pushNamed(context, Routes.registerScreen);
-                      },
-                      buttonText: "Create Account",
-                      isWhite: true,
-                    ),
-                  ],
+                return Form(
+                  key: forKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("Welcome back!", style: AppTextstyles.primaryText),
+                      AppSize.sizedBox(size: 25, isHeight: true),
+                      CommonTextFormField(
+                        validator: (val) => validator(val, fieldName: "Email"),
+                        prefixIcon: "assets/images/email_icon.png",
+                        controller: emailController,
+                        labelText: "Email",
+                      ),
+                      AppSize.sizedBox(size: 15, isHeight: true),
+                      CommonTextFormField(
+                        validator: (val) =>
+                            validator(val, fieldName: "Password"),
+                        controller: passwordController,
+                        labelText: "Password",
+                        isObscure: true,
+                        prefixIcon: "assets/images/password_icon.png",
+                      ),
+                      AppSize.sizedBox(size: 32, isHeight: true),
+                      state is LoginLoading
+                          ? CircularProgressIndicator()
+                          : CommonButton(
+                              onTap: () async {
+                                if (forKey.currentState!.validate()) {
+                                  context.read<LoginBloc>().add(
+                                    LoginPressed(
+                                      email: emailController.text,
+                                      password: passwordController.text,
+                                    ),
+                                  );
+                                }
+                              },
+                              buttonText: "Sign in",
+                            ),
+                      AppSize.sizedBox(size: 15, isHeight: true),
+                      CommonButton(
+                        onTap: () {},
+                        buttonText: "Forgot password?",
+                        isWhite: true,
+                      ),
+                      AppSize.sizedBox(size: 15, isHeight: true),
+                      CommonButton(
+                        onTap: () {
+                          Navigator.pushNamed(context, Routes.registerScreen);
+                        },
+                        buttonText: "Create Account",
+                        isWhite: true,
+                      ),
+                    ],
+                  ),
                 );
               },
             ),
