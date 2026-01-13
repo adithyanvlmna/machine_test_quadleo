@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:machine_test_quadleo/core/app_theme/app_colors.dart';
+import 'package:machine_test_quadleo/core/utils/internet_chacker.dart';
 import '../bloc/product/product_bloc.dart';
 import '../bloc/product/product_event.dart';
 import '../bloc/product/product_state.dart';
@@ -25,82 +26,85 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        
         title: const Text("Products"),
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(12),
-            child: Row(
-              spacing: 10,
-              children: [
-                Expanded(
-                  child: searchBar(
-                    onChanged: (value) {
-                      context.read<ProductBloc>().add(SearchProduct(value));
-                    },
-                  ),
-                ),
-
-                const Icon(Icons.tune),
-              ],
-            ),
-          ),
-
-          Expanded(
-            child: BlocBuilder<ProductBloc, ProductState>(
-              builder: (context, state) {
-                if (state is ProductLoading) {
-                  return const Center(
-                    child: CircularProgressIndicator(
-                      color: AppColors.primaryColor,
-                    ),
-                  );
-                }
-
-                if (state is ProductLoaded) {
-                  return AnimationLimiter(
-                    child: GridView.builder(
-                      padding: const EdgeInsets.all(12),
-                      itemCount: state.filtered.length,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            childAspectRatio: 0.7,
-                            crossAxisSpacing: 10,
-                            mainAxisSpacing: 10,
-                          ),
-                      itemBuilder: (context, index) {
-                        final product = state.filtered[index];
-
-                        return AnimationConfiguration.staggeredGrid(
-                          position: index,
-                          duration: const Duration(milliseconds: 500),
-                          columnCount: 2,
-                          child: SlideAnimation(
-                            verticalOffset: 50.0,
-                            child: FadeInAnimation(
-                              child: customProductCard(
-                                image: product.image,
-                                title: product.title,
-                                price: product.price.toString(),
-                              ),
-                            ),
-                          ),
-                        );
+      body: ConnectivityWrapperWidget(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Row(
+                spacing: 10,
+                children: [
+                  Expanded(
+                    child: searchBar(
+                      onChanged: (value) {
+                        context.read<ProductBloc>().add(SearchProduct(value));
                       },
                     ),
-                  );
-                }
-
-                return const Center(child: Text("Failed to load products"));
-              },
+                  ),
+            
+                  const Icon(Icons.tune),
+                ],
+              ),
             ),
-          ),
-        ],
+            
+            Expanded(
+              child: BlocBuilder<ProductBloc, ProductState>(
+                builder: (context, state) {
+                  if (state is ProductLoading) {
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        color: AppColors.primaryColor,
+                      ),
+                    );
+                  }
+            
+                  if (state is ProductLoaded) {
+                    return AnimationLimiter(
+                      child: GridView.builder(
+                        padding: const EdgeInsets.all(12),
+                        itemCount: state.filtered.length,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              childAspectRatio: 0.7,
+                              crossAxisSpacing: 10,
+                              mainAxisSpacing: 10,
+                            ),
+                        itemBuilder: (context, index) {
+                          final product = state.filtered[index];
+            
+                          return AnimationConfiguration.staggeredGrid(
+                            position: index,
+                            duration: const Duration(milliseconds: 500),
+                            columnCount: 2,
+                            child: SlideAnimation(
+                              verticalOffset: 50.0,
+                              child: FadeInAnimation(
+                                child: customProductCard(
+                                  image: product.image,
+                                  title: product.title,
+                                  price: product.price.toString(),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  }
+            
+                  return const Center(child: Text("Failed to load products"));
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

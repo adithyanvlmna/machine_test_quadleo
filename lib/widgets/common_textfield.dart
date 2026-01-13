@@ -4,7 +4,7 @@ import 'package:machine_test_quadleo/core/app_theme/app_colors.dart';
 
 class CommonTextFormField extends StatefulWidget {
   final TextEditingController controller;
-  final IconData? prefixIcon;
+  final String prefixIcon;
   final String labelText;
   final bool isObscure;
   final String? Function(String?)? validator;
@@ -14,7 +14,7 @@ class CommonTextFormField extends StatefulWidget {
     Key? key,
     required this.controller,
     required this.labelText,
-     this.prefixIcon,
+    required this.prefixIcon,
     this.isObscure = false,
     this.validator,
     this.keyboardType = TextInputType.text,
@@ -49,10 +49,8 @@ class _CommonTextFormFieldState extends State<CommonTextFormField> {
       decoration: InputDecoration(
         filled: true,
         fillColor: Color(0XFFF5F5F5),
-        prefixIcon:widget.isObscure? Icon(widget.prefixIcon,color: AppColors.grey,):Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text("@",style: TextStyle(fontSize: 20,color: AppColors.grey,),),
-        ),
+        prefixIcon:Image.asset(widget.prefixIcon,),
+        
         labelText: widget.labelText,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(32),borderSide: BorderSide.none),
         suffixIcon: widget.isObscure

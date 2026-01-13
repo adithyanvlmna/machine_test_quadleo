@@ -1,3 +1,4 @@
+import 'package:connectivity_wrapper/connectivity_wrapper.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -41,11 +42,13 @@ class MyApp extends StatelessWidget {
           create: (_) => ProductBloc(productRepository),
         ),
       ],
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        debugShowCheckedModeBanner: false,
-        initialRoute: Routes.loginScreen,
-        routes: Routes.routes,
+      child: ConnectivityAppWrapper(
+        app: MaterialApp(
+          title: 'Flutter Demo',
+          debugShowCheckedModeBanner: false,
+          initialRoute: Routes.splashScreen,
+          routes: Routes.routes,
+        ),
       ),
     );
   }
