@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
       ],
       child: ConnectivityAppWrapper(
         app: MaterialApp(
-          title: 'Flutter Demo',
+          title: 'Emart',
           debugShowCheckedModeBanner: false,
           initialRoute: Routes.splashScreen,
           routes: Routes.routes,
