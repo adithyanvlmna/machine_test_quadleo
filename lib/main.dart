@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:machine_test_quadleo/bloc/login/login_bloc.dart';
 import 'package:machine_test_quadleo/bloc/product/product_bloc.dart';
 import 'package:machine_test_quadleo/bloc/register/register_bloc.dart';
+import 'package:machine_test_quadleo/core/app_theme/app_colors.dart';
 import 'package:machine_test_quadleo/core/utils/routes.dart';
 import 'package:machine_test_quadleo/service/api_service.dart';
 
@@ -45,6 +46,9 @@ class MyApp extends StatelessWidget {
       child: ConnectivityAppWrapper(
         app: MaterialApp(
           title: 'Emart',
+          theme: ThemeData(
+            scaffoldBackgroundColor: Colors.white
+          ),
           debugShowCheckedModeBanner: false,
           initialRoute: Routes.splashScreen,
           routes: Routes.routes,
