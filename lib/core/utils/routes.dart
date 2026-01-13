@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:machine_test_quadleo/screens/auth/login_screen.dart';
 import 'package:machine_test_quadleo/screens/auth/registre_screen.dart';
+import 'package:machine_test_quadleo/screens/home_screen.dart';
 import 'package:machine_test_quadleo/screens/splash_screen.dart';
 
 
@@ -15,6 +16,7 @@ class Routes {
     Routes.registerScreen: (ctx) => RegisterScreen(),
 
     Routes.loginScreen: (ctx) => LoginScreen(),
+    Routes.homeScreen: (ctx) => HomeScreen(),
 
 
   };
